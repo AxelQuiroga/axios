@@ -1,0 +1,40 @@
+name: Charset reproduction #5317
+
+on:
+  push:
+    branches:
+      - chore/charset-repro-5317
+    paths:
+      - ".github/workflows/charset-repro.yml"
+      - "charset-repro/**"
+  pull_request:
+    branches:
+      - chore/charset-repro-5317
+    paths:
+      - ".github/workflows/charset-repro.yml"
+      - "charset-repro/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  reproduce:
+    name: Run charset reproduction
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: charset-repro
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install dependencies
+        run: npm install
+      - name: Run automated tests
+        run: npm test
+      - name: Run reproduction script
+        run: npm run repro
